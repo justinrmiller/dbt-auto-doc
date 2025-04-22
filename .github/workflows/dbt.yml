@@ -47,28 +47,10 @@ jobs:
 
       - name: Wait for Postgres
         run: |
-          until pg_isready -h localhost -p 5432; do
+          until pg_isready -h postgres -p 5432; do
             echo "Waiting for postgres..."
             sleep 2
           done
-
-      - name: Set up profiles.yml
-        run: |
-          mkdir -p ~/.dbt
-          echo "
-          default:
-            target: dev
-            outputs:
-              dev:
-                type: postgres
-                host: localhost
-                user: dbt_user
-                password: dbt_pass
-                port: 5432
-                dbname: dbt_db
-                schema: public
-                threads: 1
-          " > ~/.dbt/profiles.yml
 
       - name: Run dbt debug
         run: |
