@@ -61,7 +61,7 @@ jobs:
             outputs:
               dev:
                 type: postgres
-                host: postgres
+                host: localhost
                 user: dbt_user
                 password: dbt_pass
                 port: 5432
