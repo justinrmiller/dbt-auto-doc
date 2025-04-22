@@ -1,0 +1,12 @@
+default:
+  target: dev
+  outputs:
+    dev:
+      type: postgres
+      host: postgres
+      user: dbt_user
+      password: dbt_pass
+      dbname: dbt_db
+      schema: public
+      threads: 1
+      port: 5432

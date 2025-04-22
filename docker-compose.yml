@@ -1,0 +1,24 @@
+services:
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: dbt_user
+      POSTGRES_PASSWORD: dbt_pass
+      POSTGRES_DB: dbt_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  dbt:
+    build: .
+    volumes:
+      - ./dbt:/root/.dbt
+      - ./dbt/project:/usr/app
+    working_dir: /usr/app
+    depends_on:
+      - postgres
+    entrypoint: ["tail", "-f", "/dev/null"]  # useful for dev, override in prod
+
+volumes:
+  pgdata:

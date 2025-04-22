@@ -1,0 +1,14 @@
+name: 'dbt_project'
+version: '1.0'
+profile: 'default'
+
+seeds:
+  dbt_project:
+    +schema: raw
+
+models:
+  dbt_project:
+    staging:
+      +materialized: view
+    marts:
+      +materialized: table

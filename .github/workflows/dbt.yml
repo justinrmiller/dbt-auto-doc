@@ -1,0 +1,70 @@
+name: Run dbt in Docker
+
+on:
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'dbt/**'
+      - 'docker-compose.yml'
+      - '.github/workflows/dbt.yml'
+
+jobs:
+  dbt-run:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:15
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_USER: dbt_user
+          POSTGRES_PASSWORD: dbt_pass
+          POSTGRES_DB: dbt_db
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dbt
+        run: |
+          pip install dbt-postgres
+
+      - name: Wait for Postgres
+        run: |
+          until pg_isready -h localhost -p 5432; do
+            echo "Waiting for postgres..."
+            sleep 2
+          done
+
+      - name: Run dbt debug
+        run: |
+          mkdir -p ~/.dbt
+          cp dbt/profiles.yml ~/.dbt/profiles.yml
+          cd dbt/project
+          dbt debug
+
+      - name: Seed database
+        run: |
+          cd dbt/project
+          dbt seed
+
+      - name: Run dbt models
+        run: |
+          cd dbt/project
+          dbt run
+
+      - name: Show list of dbt models
+        run: |
+          cd dbt/project
+          dbt ls --resource-type model
