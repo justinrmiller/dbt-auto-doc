@@ -3,7 +3,7 @@ default:
   outputs:
     dev:
       type: postgres
-      host: postgres  # This matches the service name
+      host: localhost  # This matches the service name
       user: dbt_user
       password: dbt_pass
       port: 5432
