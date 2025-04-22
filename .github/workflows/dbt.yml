@@ -85,7 +85,7 @@ jobs:
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: |
-          python dbt/project/submit_to_openai.py --models dbt/project/models --seeds dbt/project/seeds --output output.md
+          python dbt/project/generate_with_openai.py --models dbt/project/models --seeds dbt/project/seeds --output output.md
           
       - name: ✅ Commit and push summary
         run: |
