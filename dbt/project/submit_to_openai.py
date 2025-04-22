@@ -36,17 +36,17 @@ def collect_files(base_dir: str, suffixes: tuple) -> list:
 
 @app.command()
 def submit_summary(
-    models_dir: str = typer.Option("models", help="Path to your models directory"),
-    seeds_dir: str = typer.Option("seeds", help="Path to your seeds directory"),
+    models: str = typer.Option("models", help="Path to your models directory"),
+    seeds: str = typer.Option("seeds", help="Path to your seeds directory"),
     output: Optional[str] = typer.Option("output.md", help="Path to save the generated summary"),
     model: str = typer.Option("gpt-4o", help="OpenAI model to use (e.g., gpt-4, gpt-3.5-turbo)")
 ):
-    if not os.path.isdir(models_dir) or not os.path.isdir(seeds_dir):
+    if not os.path.isdir(models) or not os.path.isdir(seeds):
         typer.echo("❌ Both models and seeds directories must exist.")
         raise typer.Exit(code=1)
 
-    sql_files = collect_files(models_dir, (".sql",))
-    csv_files = collect_files(seeds_dir, (".csv",))
+    sql_files = collect_files(models, (".sql",))
+    csv_files = collect_files(seeds, (".csv",))
 
     all_files = sql_files + csv_files
     if not all_files:
