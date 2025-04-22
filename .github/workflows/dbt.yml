@@ -1,3 +1,8 @@
+# Ensure that you set Read/Write permissions otherwise the output.md push will fail. Also make sure that the OPENAI_API_KEY secret is set and the attached API key has good permission settings.
+#
+# Read/Write Permissions:
+# Setting -> Actions -> General -> Workflow permissions -> Select 'Read and Write permissions' option and save.
+
 name: Run dbt in Docker
 
 on:
